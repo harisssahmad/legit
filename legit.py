@@ -50,24 +50,3 @@ class Legit():
             commit = commit.parent
 
         return history
-
-
-repo = Legit("my_repo")
-# Actual command:
-# > git init
-
-repo.commit("Initial commit")
-# Actual command:
-# > git commit -m "Make commit work"
-
-
-repo.commit("Add README")
-repo.commit("Fix bug")
-
-history = repo.log()
-
-for commit in history:
-    print(f"commit {commit.id}")
-    print(f"    {commit.message}")
-# Actual command:
-# > git log
