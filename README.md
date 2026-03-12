@@ -85,3 +85,9 @@ This makes it ideal for learning Git internals and exploring commit/branch mecha
 -   Commit IDs start at 0 and increment automatically.
 -   Branches are created automatically when checking out a new name.
 -   `log()` prints commits from the most recent back to the first.
+
+## References
+
+-   [Git JavaScript Implementation](https://kushagra.dev/blog/build-git-learn-git)
+-   [Pro Git Book](https://git-scm.com/book/en/)
+-   [Git Glossary](https://www.kernel.org/pub/software/scm/git/docs/gitglossary.html)
