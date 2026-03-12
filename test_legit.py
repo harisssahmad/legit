@@ -56,15 +56,73 @@ def test_parent_chain():
     c1 = repo.commit("Initial commit")
     c2 = repo.commit("Second commit")
 
-    assert repo.HEAD == c2
-    assert repo.HEAD.parent == c1
+    assert repo.HEAD.commit == c2
+    assert repo.HEAD.commit.parent == c1
     assert c1.parent is None
 
+def test_create_new_branch():
+    repo = Legit("repo")
+
+    repo.commit("initial")
+    repo.checkout("feature")
+
+    assert repo.HEAD.name == "feature"
+    assert len(repo.branches) == 2
+    assert repo.HEAD.commit.message == "initial"
+
+
+def test_switch_existing_branch():
+    repo = Legit("repo")
+
+    repo.commit("initial")
+    repo.checkout("feature")
+    repo.checkout("master")
+
+    assert repo.HEAD.name == "master"
+
+
+def test_branch_diverges():
+    repo = Legit("repo")
+
+    repo.commit("initial")
+
+    repo.checkout("feature")
+    repo.commit("feature commit")
+
+    repo.checkout("master")
+    repo.commit("master commit")
+
+    # check master history
+    history_master = repo.log()
+    assert history_master[0].message == "master commit"
+    assert history_master[1].message == "initial"
+
+    # check feature history
+    repo.checkout("feature")
+    history_feature = repo.log()
+    assert history_feature[0].message == "feature commit"
+    assert history_feature[1].message == "initial"
+
+
+def test_checkout_returns_repo():
+    repo = Legit("repo")
+
+    result = repo.checkout("feature")
+
+    assert result == repo
+
 if __name__ == "__main__":
+    # commits check
     test_single_commit()
     test_multiple_commits()
+    # logs check
     test_empty_log()
     test_single_commit_log()
     test_multiple_commits_log()
     test_parent_chain()
+    # checkout and branches check
+    test_create_new_branch()
+    test_switch_existing_branch()
+    test_branch_diverges()
+    test_checkout_returns_repo()
     print("All tests passed.")
